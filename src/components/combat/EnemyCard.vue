@@ -4,7 +4,6 @@
     v-on="$listeners"
     v-bind="$attrs"
     @click="handleClick"
-    :id="elementId"
     :width="width"
     :height="height"
     :outlined="!dead"
@@ -62,6 +61,7 @@ export default class EnemyCard extends Vue {
   }
 
   public mounted() {
+    this.$el.id = this.elementId;
     animateCSS('#' + this.elementId, 'backInDown');
   }
 

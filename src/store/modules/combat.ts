@@ -2,6 +2,7 @@ import { Module } from 'vuex';
 import { CombatState, GameState } from '@/models';
 
 export const CombatModule: Module<CombatState, GameState> = {
+  namespaced: true,
   state: {
     enemies: [],
     hero: null,
