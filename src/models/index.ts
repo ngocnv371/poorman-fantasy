@@ -35,3 +35,15 @@ export interface Hero extends Fightable {
 export interface Action extends Identifiable {}
 export interface Skill extends Action {}
 export interface Spell extends Action {}
+
+export interface GameState {
+  hero: Hero;
+}
+
+export interface CombatState {
+  hero: Hero | null;
+  enemies: Monster[];
+  turn: number;
+  over: boolean;
+  victory: boolean;
+}
