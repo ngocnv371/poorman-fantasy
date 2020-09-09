@@ -69,7 +69,10 @@ import { Component } from 'vue-property-decorator';
 import EnemyCard from '@/components/combat/EnemyCard.vue';
 import HeroCard from '@/components/combat/HeroCard.vue';
 import ImpressiveMessage from '@/components/ImpressiveMessage.vue';
-import { Monster, Hero, Fightable } from '@/models';
+import { Monster, Hero, Fightable, CombatState } from '@/models';
+import { namespace } from 'vuex-class';
+
+const CombatModule = namespace('combat');
 
 @Component({
   name: 'Combat',
@@ -80,78 +83,11 @@ import { Monster, Hero, Fightable } from '@/models';
   },
 })
 export default class Combat extends Vue {
-  public enemies: Monster[] = [
-    {
-      id: '1',
-      name: 'Ghost',
-      icon: 'mdi-ghost',
-      maxLife: 10,
-      life: 10,
-      damage: [3, 7],
-    },
-    {
-      id: '2',
-      name: 'Ghost',
-      icon: 'mdi-ghost',
-      maxLife: 10,
-      life: 10,
-      damage: [3, 7],
-    },
-    {
-      id: '3',
-      name: 'Ghost',
-      icon: 'mdi-ghost',
-      maxLife: 10,
-      life: 10,
-      damage: [3, 7],
-    },
-  ];
+  @CombatModule.State((state: CombatState) => state.enemies)
+  public enemies!: Monster[];
 
-  public hero: Hero = {
-    id: 'hero',
-    name: 'Max Pain',
-    icon: 'mdi-knight',
-    maxLife: 50,
-    life: 40,
-    maxSanity: 40,
-    sanity: 45,
-    damage: [2, 8],
-    inventory: {
-      gold: 95,
-      slots: 20,
-      items: {
-        'iron-sword': 1,
-      },
-    },
-    skills: [
-      {
-        id: 'Slash',
-        name: 'Slash',
-        icon: 'mdi-sword',
-        description: '5-10 PHYS',
-      },
-      {
-        id: 'Cleave',
-        name: 'Cleave',
-        icon: 'mdi-fan',
-        description: '4-8 PHYS',
-      },
-    ],
-    spells: [
-      {
-        id: 'Fireball',
-        name: 'Fireball',
-        icon: 'mdi-fire',
-        description: '5-10 FIRE',
-      },
-      {
-        id: 'Freeze',
-        name: 'Freeze',
-        icon: 'mdi-snowflake',
-        description: '5-10 COLD',
-      },
-    ],
-  };
+  @CombatModule.State((state: CombatState) => state.hero)
+  public hero!: Hero;
 
   public battleOrder: Fightable[] = [];
   public waitYourTurnWarning = false;

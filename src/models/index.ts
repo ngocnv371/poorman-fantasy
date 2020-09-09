@@ -13,7 +13,8 @@ export interface Killable extends Identifiable {
 }
 
 export interface Fightable extends Killable {
-  damage: number[];
+  inventory: Inventory;
+  abilities: Ability[];
 }
 
 export interface Monster extends Fightable {}
@@ -27,23 +28,28 @@ export interface Inventory {
 export interface Hero extends Fightable {
   maxSanity: number;
   sanity: number;
-  inventory: Inventory;
-  skills: Skill[];
-  spells: Spell[];
 }
 
-export interface Action extends Identifiable {}
-export interface Skill extends Action {}
-export interface Spell extends Action {}
+export enum AbilityType {
+  Spell,
+  Skill
+}
+
+export interface Ability extends Identifiable {
+  damage: number[];
+  type: AbilityType;
+}
 
 export interface GameState {
   hero: Hero;
 }
 
 export interface CombatState {
-  hero: Hero | null;
+  hero: Hero;
   enemies: Monster[];
   turn: number;
   over: boolean;
   victory: boolean;
+  orders: string[];
+  waitingForHeroInput: boolean;
 }
