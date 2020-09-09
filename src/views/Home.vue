@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
+    <v-btn color="primary" @click="$emit('combat')">Enter Combat</v-btn>
   </div>
 </template>
 

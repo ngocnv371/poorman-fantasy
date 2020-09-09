@@ -4,7 +4,7 @@ export const animateCSS = (
   prefix = 'animate__'
 ) =>
   // We create a Promise and return it
-  new Promise((resolve, reject) => {
+  new Promise(resolve => {
     const animationName = `${prefix}${animation}`;
     const node = document.querySelector(selector);
     if (!node) {
