@@ -10,7 +10,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Home from './views/Home.vue';
-import Combat from './components/combat/Combat.vue';
+import Combat from './views/Combat.vue';
 
 export default Vue.extend({
   name: 'App',

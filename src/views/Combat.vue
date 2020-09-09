@@ -66,10 +66,10 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import EnemyCard from './EnemyCard.vue';
-import HeroCard from './HeroCard.vue';
-import ImpressiveMessage from '../ImpressiveMessage.vue';
-import { Monster, Hero, Fightable } from '../../models';
+import EnemyCard from '@/components/combat/EnemyCard.vue';
+import HeroCard from '@/components/combat/HeroCard.vue';
+import ImpressiveMessage from '@/components/ImpressiveMessage.vue';
+import { Monster, Hero, Fightable } from '@/models';
 
 @Component({
   name: 'Combat',
@@ -184,6 +184,7 @@ export default class Combat extends Vue {
     this.battleOrder = [];
     this.combatOver = true;
     // TODO: show battle summary
+    this.$emit('end');
   }
 
   public onEnemyClick(enemy: Monster) {
