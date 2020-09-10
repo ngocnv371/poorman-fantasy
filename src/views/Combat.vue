@@ -69,7 +69,7 @@ import { Component } from 'vue-property-decorator';
 import EnemyCard from '@/components/combat/EnemyCard.vue';
 import HeroCard from '@/components/combat/HeroCard.vue';
 import ImpressiveMessage from '@/components/ImpressiveMessage.vue';
-import { Monster, Hero, Fightable, CombatState } from '@/models';
+import { Monster, Hero, CombatState } from '@/models';
 import { namespace } from 'vuex-class';
 
 const CombatModule = namespace('combat');
@@ -89,101 +89,38 @@ export default class Combat extends Vue {
   @CombatModule.State((state: CombatState) => state.hero)
   public hero!: Hero;
 
-  public battleOrder: Fightable[] = [];
-  public waitYourTurnWarning = false;
-  public combatOver = false;
+  @CombatModule.State((state: CombatState) => state.waitingForHeroInput)
+  public waitingForHeroInput!: boolean;
 
-  public get isHeroTurn() {
-    return this.battleOrder.length && this.battleOrder[0].id === this.hero.id;
-  }
+  @CombatModule.State((state: CombatState) => state.over)
+  public combatOver!: boolean;
+
+  @CombatModule.Getter('isHeroTurn')
+  public isHeroTurn!: boolean;
+
+  @CombatModule.Getter('currentCombatantId')
+  public currentCombatantId!: string;
+
+  @CombatModule.Action('playerAttack')
+  public playerAttack!: (payload: {
+    abilityId: string;
+    targetId: string;
+  }) => void;
+
+  public waitYourTurnWarning = false;
 
   public get isHeroDead() {
     return this.hero.life <= 0;
   }
-
-  public get currentCombatantId() {
-    if (!this.battleOrder.length) {
-      return null;
-    }
-    return this.battleOrder[0].id;
-  }
-
-  public mounted() {
-    this.startCombat();
-  }
-
-  public startCombat() {
-    this.battleOrder = this.calculateInitialBattleOrder();
-  }
-
-  public endCombat() {
-    this.battleOrder = [];
-    this.combatOver = true;
-    // TODO: show battle summary
-    this.$emit('end');
-  }
-
   public onEnemyClick(enemy: Monster) {
     if (!this.isHeroTurn) {
       this.waitYourTurnWarning = true;
       return;
     }
-    if (enemy.life <= 0) {
-      return;
-    }
-    enemy.life -= 2;
-    this.endTurn();
-  }
-
-  public endTurn() {
-    this.shiftBattleOrder();
-    this.processTurn();
-  }
-
-  public processTurn() {
-    if (this.isHeroTurn) {
-      // wait for user's inputs
-      this.waitYourTurnWarning = false;
-      return;
-    }
-    // monster turn
-    this.attackHero(this.battleOrder[0]);
-  }
-
-  public attackHero(monster: Monster) {
-    if (this.isHeroTurn) {
-      // please don't hurt yourself
-      return;
-    }
-    if (this.hero.life <= 0) {
-      // you're already dead
-      this.endCombat();
-      return;
-    }
-    const damageDelta = monster.damage[1] - monster.damage[0];
-    const calculatedDamage = Math.floor(
-      Math.random() * damageDelta + monster.damage[0]
-    );
-    this.hero.life -= calculatedDamage;
-    console.log(`${monster.name} attacks hero for ${calculatedDamage} damage`);
-    if (this.hero.life <= 0) {
-      this.hero.life = 0;
-      console.log(`The hero valiantly dies`);
-    }
-    setTimeout(() => {
-      this.$nextTick(() => {
-        this.endTurn();
-      });
-    }, 2000);
-  }
-
-  public shiftBattleOrder() {
-    const [top, ...rest] = this.battleOrder;
-    this.battleOrder = [...rest, top];
-  }
-
-  public calculateInitialBattleOrder() {
-    return [this.hero, ...this.enemies];
+    this.playerAttack({
+      abilityId: 'Slash',
+      targetId: enemy.id,
+    });
   }
 }
 </script>

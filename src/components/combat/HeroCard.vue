@@ -65,7 +65,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import StatusBar from './StatusBar.vue';
 import SquareButton from '../SquareButton.vue';
 import ActionBar from './ActionBar.vue';
-import { Hero } from '@/models';
+import { AbilityType, Hero } from '@/models';
 
 @Component({
   name: 'HeroCard',
@@ -86,13 +86,13 @@ export default class HeroCard extends Vue {
   public active!: boolean;
 
   public categorySpells = {
-    id: 'spells',
+    id: AbilityType.Spell,
     label: 'Spells',
     icon: 'mdi-book-open-variant',
   };
 
   public categorySkills = {
-    id: 'skills',
+    id: AbilityType.Skill,
     label: 'Skills',
     icon: 'mdi-sword',
   };
@@ -113,9 +113,9 @@ export default class HeroCard extends Vue {
 
   public get actions() {
     if (this.selectedCategory.id === this.categorySkills.id) {
-      return this.hero.skills;
+      return this.hero.abilities.filter(a => a.type === AbilityType.Skill);
     } else if (this.selectedCategory.id === this.categorySpells.id) {
-      return this.hero.spells;
+      return this.hero.abilities.filter(a => a.type === AbilityType.Spell);
     }
     return [];
   }

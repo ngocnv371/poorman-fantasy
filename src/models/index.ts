@@ -12,12 +12,14 @@ export interface Killable extends Identifiable {
   maxLife: number;
 }
 
-export interface Fightable extends Killable {
+export interface Character extends Killable {
+  mana: number;
+  maxMana: number;
   inventory: Inventory;
   abilities: Ability[];
 }
 
-export interface Monster extends Fightable {}
+export type Monster = Character;
 
 export interface Inventory {
   gold: number;
@@ -25,18 +27,19 @@ export interface Inventory {
   items: Dictionary<number>;
 }
 
-export interface Hero extends Fightable {
+export interface Hero extends Character {
   maxSanity: number;
   sanity: number;
 }
 
 export enum AbilityType {
   Spell,
-  Skill
+  Skill,
 }
 
 export interface Ability extends Identifiable {
   damage: number[];
+  cost: number;
   type: AbilityType;
 }
 

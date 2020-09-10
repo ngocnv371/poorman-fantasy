@@ -12,6 +12,7 @@ import Vue from 'vue';
 import Home from './views/Home.vue';
 import Combat from './views/Combat.vue';
 import { mapActions } from 'vuex';
+import { enemies } from '@/models/defaultEnemies';
 
 export default Vue.extend({
   name: 'App',
@@ -23,32 +24,7 @@ export default Vue.extend({
 
   data: () => ({
     combat: false,
-    enemies: [
-      {
-        id: '1',
-        name: 'Ghost',
-        icon: 'mdi-ghost',
-        maxLife: 10,
-        life: 10,
-        damage: [3, 7],
-      },
-      {
-        id: '2',
-        name: 'Ghost',
-        icon: 'mdi-ghost',
-        maxLife: 10,
-        life: 10,
-        damage: [3, 7],
-      },
-      {
-        id: '3',
-        name: 'Ghost',
-        icon: 'mdi-ghost',
-        maxLife: 10,
-        life: 10,
-        damage: [3, 7],
-      },
-    ],
+    enemies: enemies,
   }),
 
   methods: {

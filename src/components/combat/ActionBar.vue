@@ -24,7 +24,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import ActionSlot from './ActionSlot.vue';
-import { Action } from '@/models';
+import { Ability } from '@/models';
 
 @Component({
   name: 'ActionBar',
@@ -34,7 +34,7 @@ import { Action } from '@/models';
 })
 export default class ActionBar extends Vue {
   @Prop({ required: true })
-  public actions!: Action[];
+  public actions!: Ability[];
 
   @Prop({ default: false })
   public disabled!: boolean;
