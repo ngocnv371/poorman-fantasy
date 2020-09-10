@@ -57,7 +57,7 @@ export default class EnemyCard extends Vue {
   }
 
   public get elementId() {
-    return `monster-card--${this.monster.id}-${this.monster.name}`;
+    return `monster-card--${this.monster.id}`;
   }
 
   public mounted() {

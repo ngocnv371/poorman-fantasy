@@ -40,6 +40,7 @@ export enum AbilityType {
 export interface Ability extends Identifiable {
   damage: number[];
   cost: number;
+  useTime: number;
   type: AbilityType;
 }
 

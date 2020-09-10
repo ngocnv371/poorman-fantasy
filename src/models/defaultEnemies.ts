@@ -11,13 +11,23 @@ const ghost: Character = {
   inventory: { gold: 0, slots: 1, items: {} },
   abilities: [
     {
-      id: 'Claw',
-      name: 'Savage Claws',
-      cost: 3,
-      damage: [3, 8],
+      id: 'Claws',
+      name: 'Claws',
+      cost: 0,
+      useTime: 1000,
+      damage: [2, 4],
       icon: 'mdi-sword',
       type: AbilityType.Skill,
-    },
+	},
+	{
+		id: 'Savage Claws',
+		name: 'Savage Claws',
+		cost: 3,
+		useTime: 1000,
+		damage: [3, 8],
+		icon: 'mdi-sword',
+		type: AbilityType.Skill,
+	  },
   ],
 };
 export const enemies: Character[] = [
@@ -27,7 +37,8 @@ export const enemies: Character[] = [
   },
   {
     ...ghost,
-    id: 'ghost-2',
+	id: 'ghost-2',
+	name: 'Red Ghost',
   },
   {
     ...ghost,

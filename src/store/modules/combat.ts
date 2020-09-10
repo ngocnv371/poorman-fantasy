@@ -99,47 +99,78 @@ export const CombatModule: Module<CombatState, GameState> = {
     },
   },
   actions: {
-    start(context, payload) {
+    async start(context, payload) {
       console.log('Initiate combat');
       const { enemies } = payload;
       context.commit('reset', {
         hero: context.rootState.hero,
         enemies: enemies,
       });
-      context.dispatch('processTurn');
+      await context.dispatch('processTurn');
     },
-    playerAttack(context, payload) {
+    async playerAttack(context, payload) {
       console.log('Initiate player attack');
-      const { abilityId, targetId } = payload;
       if (!context.getters['isHeroTurn']) {
         return;
       }
-      context.commit('useAbility', {
+      const { targetId } = payload;
+      const target: Character = context.getters['getCombatantById'](targetId);
+      if (!target) {
+        throw new Error(`Combatant #${targetId} not found`);
+      }
+      if (target.life <= 0) {
+        console.log('There is no need to attack a corpse');
+        return;
+      }
+      await context.dispatch('useAbility', {
         userId: context.state.hero.id,
-        targetId: targetId,
-        abilityId: abilityId,
+        ...payload,
       });
+      context.commit('waitFoHeroInput', { value: false });
       if (context.getters['isAllEnemiesDead']) {
-        context.dispatch('endCombat');
+        await context.dispatch('endCombat');
       } else {
-        context.dispatch('endTurn');
+        await context.dispatch('endTurn');
       }
     },
-    processTurn(context, payload) {
+    useAbility(context, payload) {
+      const { userId, abilityId, targetId } = payload;
+      return new Promise(resolve => {
+        context.commit('useAbility', {
+          userId: userId,
+          targetId: targetId,
+          abilityId: abilityId,
+        });
+        const user: Character = context.getters['getCombatantById'](userId);
+        if (!user) {
+          throw new Error(`Combatant #${userId} not found`);
+        }
+        const ability = user.abilities.find(a => a.id === abilityId);
+        if (!ability) {
+          throw new Error(
+            `Combatant ${user.name} (#${user.id}) has no ability #${abilityId}`
+          );
+        }
+        setTimeout(() => {
+          resolve();
+        }, ability.useTime);
+      });
+    },
+    async processTurn(context, payload) {
       console.log('Process turn');
       if (context.getters['isHeroTurn']) {
         context.commit('waitFoHeroInput', { value: true });
         return;
       }
-      context.dispatch('processEnemyTurn');
+      await context.dispatch('processEnemyTurn');
     },
-    processEnemyTurn(context) {
+    async processEnemyTurn(context) {
       console.log('Process enemy turn');
       if (context.getters['isHeroTurn']) {
         return;
       }
       if (context.state.hero.life <= 0) {
-        context.dispatch('endCombat');
+        await context.dispatch('endCombat');
         return;
       }
       const enemyId = context.state.orders[0];
@@ -153,14 +184,15 @@ export const CombatModule: Module<CombatState, GameState> = {
         targetId: context.state.hero.id,
         abilityId: ability.id,
       });
-      context.dispatch('endTurn');
+      await context.dispatch('endTurn');
     },
-    endTurn(context) {
+    async endTurn(context) {
       context.commit('endTurn');
-      context.dispatch('processTurn');
+      await context.dispatch('processTurn');
     },
     endCombat(context) {
       console.log('End combat');
+      context.commit('end', { victory: context.getters['isAllEnemiesDead']});
     },
   },
   getters: {
@@ -172,6 +204,12 @@ export const CombatModule: Module<CombatState, GameState> = {
     },
     isAllEnemiesDead(state) {
       return !state.enemies.find(e => e.life > 0);
+    },
+    getCombatantById(state) {
+      return (id: string) =>
+        id === state.hero.id
+          ? state.hero
+          : state.enemies.find(e => e.id === id);
     },
   },
 };

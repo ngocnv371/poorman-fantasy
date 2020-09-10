@@ -113,6 +113,9 @@ export default class Combat extends Vue {
     return this.hero.life <= 0;
   }
   public onEnemyClick(enemy: Monster) {
+    if (this.combatOver) {
+      return;
+    }
     if (!this.isHeroTurn) {
       this.waitYourTurnWarning = true;
       return;
