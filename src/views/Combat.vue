@@ -9,7 +9,7 @@
             @click="onEnemyClick(item)"
             :key="item.name"
             :monster="item"
-            :color="currentCombatantId === item.id ? 'indigo' : ''"
+            :color="currentCombatant.id === item.id ? 'indigo' : ''"
           />
         </div>
         <v-spacer></v-spacer>

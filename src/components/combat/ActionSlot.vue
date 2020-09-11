@@ -6,10 +6,11 @@
     height="130"
     :disabled="disabled"
   >
-    <ActionItem v-if="action" v-bind="action" />
+    <ActionItem v-if="action" :action="action" />
   </v-card>
 </template>
 <script lang="ts">
+import { Ability } from '@/models';
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import ActionItem from './ActionItem.vue';
@@ -22,7 +23,7 @@ import ActionItem from './ActionItem.vue';
 })
 export default class ActionSlot extends Vue {
   @Prop({ default: null })
-  public action!: object | null;
+  public action!: Ability | null;
 
   @Prop({ default: false })
   public disabled!: boolean;

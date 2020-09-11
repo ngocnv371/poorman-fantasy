@@ -56,6 +56,9 @@ export const BattleModule: Module<BattleState, GameState> = {
       context.commit('setSelectedAbility', payload);
     },
     selectTarget(context, payload) {
+      if (!context.state.selectedAbilityId) {
+        return;
+      }
       context.commit('setSelectedTarget', payload);
     },
   },
