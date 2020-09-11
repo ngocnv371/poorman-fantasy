@@ -1,7 +1,8 @@
-import { Character, AbilityType } from '.';
+import { Character, AbilityType, CharacterController } from '.';
 
 const ghost: Character = {
   id: '1',
+  controller: CharacterController.AI,
   name: 'Ghost',
   icon: 'mdi-ghost',
   maxLife: 10,
@@ -18,16 +19,16 @@ const ghost: Character = {
       damage: [2, 4],
       icon: 'mdi-sword',
       type: AbilityType.Skill,
-	},
-	{
-		id: 'Savage Claws',
-		name: 'Savage Claws',
-		cost: 3,
-		useTime: 1000,
-		damage: [3, 8],
-		icon: 'mdi-sword',
-		type: AbilityType.Skill,
-	  },
+    },
+    {
+      id: 'Savage Claws',
+      name: 'Savage Claws',
+      cost: 3,
+      useTime: 1000,
+      damage: [3, 8],
+      icon: 'mdi-sword',
+      type: AbilityType.Skill,
+    },
   ],
 };
 export const enemies: Character[] = [
@@ -37,8 +38,8 @@ export const enemies: Character[] = [
   },
   {
     ...ghost,
-	id: 'ghost-2',
-	name: 'Red Ghost',
+    id: 'ghost-2',
+    name: 'Red Ghost',
   },
   {
     ...ghost,

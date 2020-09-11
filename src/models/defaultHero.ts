@@ -1,7 +1,8 @@
-import { Hero, AbilityType } from '.';
+import { Hero, AbilityType, CharacterController } from '.';
 
 export const defaultHero: Hero = {
   id: 'hero',
+  controller: CharacterController.Player,
   name: 'Max Pain',
   icon: 'mdi-knight',
   maxLife: 100,

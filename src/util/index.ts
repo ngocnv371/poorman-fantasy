@@ -1,3 +1,5 @@
+import { Identifiable } from '@/models';
+
 export const animateCSS = (
   selector: string,
   animation: string,
@@ -29,6 +31,11 @@ export const animateCSS = (
   });
 
 let lastId = 1;
+
 export function generateId(): string {
   return `generated-id-${++lastId}`;
+}
+
+export function formatName(entity: Identifiable): string {
+  return `${entity.name} (#${entity.id})`;
 }

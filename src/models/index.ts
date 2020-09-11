@@ -12,7 +12,13 @@ export interface Killable extends Identifiable {
   maxLife: number;
 }
 
+export enum CharacterController {
+  Player,
+  AI,
+}
+
 export interface Character extends Killable {
+  controller: CharacterController;
   mana: number;
   maxMana: number;
   inventory: Inventory;
@@ -56,4 +62,13 @@ export interface CombatState {
   victory: boolean;
   orders: string[];
   waitingForHeroInput: boolean;
+}
+
+export interface BattleState {
+  combatants: Character[];
+  turn: number;
+  over: boolean;
+  orders: string[];
+  selectedAbilityId: string;
+  selectedTargetId: string;
 }

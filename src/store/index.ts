@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { GameState, Hero } from '@/models';
+import { GameState } from '@/models';
 import { CombatModule } from './modules/combat';
 import { defaultHero } from '@/models/defaultHero';
+import { BattleModule } from './modules/battle';
 
 Vue.use(Vuex);
 
@@ -14,5 +15,6 @@ export default new Vuex.Store<GameState>({
   actions: {},
   modules: {
     combat: CombatModule,
+    battle: BattleModule,
   },
 });
