@@ -100,8 +100,14 @@ export class BattleController {
 
   private processPlayerTurn(state: BattleState) {
     const ability = this.getSelectedAbility(state);
+    if (!ability) {
+      throw new Error(`Selected ability #${state.selectedAbilityId} not found`);
+    }
     const player = this.getCurrentCombatant(state);
     const target = this.getSelectedTarget(state);
+    if (!target) {
+      throw new Error(`Selected target #${state.selectedTargetId} not found`);
+    }
     this.useAbility(state, player, ability, target);
     state.selectedAbilityId = '';
     state.selectedTargetId = '';
@@ -141,25 +147,13 @@ export class BattleController {
     return unit;
   }
 
-  private getSelectedTarget(state: BattleState) {
-    const target = state.combatants.find(a => a.id === state.selectedTargetId);
-    if (!target) {
-      throw new Error(
-        `Selected combatant #${state.selectedTargetId} not found`
-      );
-    }
-    return target;
+  public getSelectedTarget(state: BattleState) {
+    return state.combatants.find(a => a.id === state.selectedTargetId);
   }
 
-  private getSelectedAbility(state: BattleState) {
+  public getSelectedAbility(state: BattleState) {
     const player = this.getCurrentCombatant(state);
-    const ability = player.abilities.find(
-      a => a.id === state.selectedAbilityId
-    );
-    if (!ability) {
-      throw new Error(`Selected ability #${state.selectedAbilityId} not found`);
-    }
-    return ability;
+    return player.abilities.find(a => a.id === state.selectedAbilityId);
   }
 
   private calculateActorInteraction(actor: Character, target: Character) {

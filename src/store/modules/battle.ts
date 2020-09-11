@@ -30,6 +30,12 @@ export const BattleModule: Module<BattleState, GameState> = {
     mobs(state) {
       return controller.getMobs(state);
     },
+    selectedAbility(state) {
+      return controller.getSelectedAbility(state);
+    },
+    selectedTarget(state) {
+      return controller.getSelectedTarget(state);
+    }
   },
   mutations: {
     start(state, payload) {

@@ -1,6 +1,12 @@
 <template>
   <v-card class="pt-2 d-flex flex-column align-center" :elevation="0">
-    <v-card outlined class="mx-auto" :width="size" @click="handleClick">
+    <v-card
+      outlined
+      class="mx-auto"
+      :width="size"
+      :color="active ? 'indigo' : ''"
+      @click="handleClick"
+    >
       <v-avatar :min-width="size" :min-height="size">
         <v-icon>{{ action.icon }}</v-icon>
       </v-avatar>
@@ -34,6 +40,13 @@ export default class ActionItem extends Vue {
 
   @BattleModule.Action('selectAbility')
   public selectAbility!: (payload: { id: string }) => void;
+
+  @BattleModule.Getter('selectedAbility')
+  public selectedAbility!: Ability | undefined;
+
+  public get active() {
+    return this.selectedAbility && this.selectedAbility.id === this.action.id;
+  }
 
   public handleClick() {
     this.selectAbility(this.action);
