@@ -49,6 +49,9 @@ export const BattleModule: Module<BattleState, GameState> = {
     start(context, payload) {
       context.commit('start', payload);
     },
+    escape(context, payload) {
+      context.commit('escape', payload);
+    },
     selectAbility(context, payload) {
       context.commit('setSelectedAbility', payload);
     },

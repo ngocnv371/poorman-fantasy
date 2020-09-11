@@ -3,7 +3,7 @@
     <div class="d-flex flex flex-column" style="height: 100%">
       <div class="flex d-flex pt-2" key="enemy-lane">
         <v-spacer></v-spacer>
-        <div class="flex" v-for="item of enemies" :key="item.id">
+        <div class="flex" v-for="item of mobs" :key="item.id">
           <EnemyCard
             class="mx-auto"
             @click="onEnemyClick(item)"
@@ -17,15 +17,15 @@
       <v-spacer></v-spacer>
       <div class="flex">
         <v-card flat min-height="100" key="river">
-          <div class="d-flex text-center" v-if="!combatOver">
+          <div class="d-flex text-center" v-if="!isOver">
             <ImpressiveMessage
-              :show="isHeroTurn"
+              :show="isPlayerTurn"
               class="amber--text flex font-weight-bold"
             >
               Your turn
             </ImpressiveMessage>
             <ImpressiveMessage
-              :show="!isHeroTurn"
+              :show="!isPlayerTurn"
               class="pink--text flex font-weight-bold"
             >
               Monster turn
@@ -44,7 +44,7 @@
       <v-spacer></v-spacer>
       <div class="flex d-flex flex-column" key="hero-lane">
         <v-spacer></v-spacer>
-        <HeroCard :hero="hero" :active="isHeroTurn" class="mx-auto" />
+        <HeroCard :hero="hero" :active="isPlayerTurn" class="mx-auto" />
       </div>
     </div>
     <v-snackbar v-model="waitYourTurnWarning" key="please wait your turn">
@@ -69,10 +69,10 @@ import { Component } from 'vue-property-decorator';
 import EnemyCard from '@/components/combat/EnemyCard.vue';
 import HeroCard from '@/components/combat/HeroCard.vue';
 import ImpressiveMessage from '@/components/ImpressiveMessage.vue';
-import { Monster, Hero, CombatState } from '@/models';
+import { Monster, Character } from '@/models';
 import { namespace } from 'vuex-class';
 
-const CombatModule = namespace('combat');
+const CombatModule = namespace('battle');
 
 @Component({
   name: 'Combat',
@@ -83,47 +83,52 @@ const CombatModule = namespace('combat');
   },
 })
 export default class Combat extends Vue {
-  @CombatModule.State((state: CombatState) => state.enemies)
-  public enemies!: Monster[];
+  @CombatModule.Getter('mobs')
+  public mobs!: Character[];
 
-  @CombatModule.State((state: CombatState) => state.hero)
-  public hero!: Hero;
+  @CombatModule.Getter('player')
+  public hero!: Character;
 
-  @CombatModule.State((state: CombatState) => state.waitingForHeroInput)
-  public waitingForHeroInput!: boolean;
+  @CombatModule.Getter('needPlayerInput')
+  public needPlayerInput!: boolean;
 
-  @CombatModule.State((state: CombatState) => state.over)
-  public combatOver!: boolean;
+  @CombatModule.Getter('isOver')
+  public isOver!: boolean;
 
-  @CombatModule.Getter('isHeroTurn')
-  public isHeroTurn!: boolean;
+  @CombatModule.Getter('currentCombatant')
+  public currentCombatant!: Character;
 
-  @CombatModule.Getter('currentCombatantId')
-  public currentCombatantId!: string;
+  @CombatModule.Action('start')
+  public start!: () => void;
 
-  @CombatModule.Action('playerAttack')
-  public playerAttack!: (payload: {
-    abilityId: string;
-    targetId: string;
-  }) => void;
+  @CombatModule.Action('escape')
+  public escape!: () => void;
+
+  @CombatModule.Action('selectAbility')
+  public selectAbility!: (payload: { id: string }) => void;
+
+  @CombatModule.Action('selectTarget')
+  public selectTarget!: (payload: { id: string }) => void;
 
   public waitYourTurnWarning = false;
 
   public get isHeroDead() {
     return this.hero.life <= 0;
   }
+
+  public get isPlayerTurn() {
+    return this.currentCombatant.id === this.hero.id;
+  }
+
   public onEnemyClick(enemy: Monster) {
-    if (this.combatOver) {
+    if (this.isOver) {
       return;
     }
-    if (!this.isHeroTurn) {
+    if (!this.isPlayerTurn) {
       this.waitYourTurnWarning = true;
       return;
     }
-    this.playerAttack({
-      abilityId: 'Slash',
-      targetId: enemy.id,
-    });
+    this.selectTarget(enemy);
   }
 }
 </script>

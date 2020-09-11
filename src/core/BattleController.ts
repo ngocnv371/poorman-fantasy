@@ -3,6 +3,7 @@ import { formatName } from '@/util';
 
 export class BattleController {
   public start(state: BattleState, combatants: Character[]) {
+    console.log('battle start');
     state.combatants = combatants;
     state.turn = 0;
     state.over = false;
@@ -195,4 +196,3 @@ export class BattleController {
     }
   }
 }
-export default Core;

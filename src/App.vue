@@ -11,7 +11,7 @@
 import Vue from 'vue';
 import Home from './views/Home.vue';
 import Combat from './views/Combat.vue';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import { enemies } from '@/models/defaultEnemies';
 
 export default Vue.extend({
@@ -27,10 +27,14 @@ export default Vue.extend({
     enemies: enemies,
   }),
 
+  computed: {
+    ...mapState(['hero']),
+  },
+
   methods: {
-    ...mapActions('combat', ['start']),
+    ...mapActions('battle', ['start']),
     handleCombatStart() {
-      this.start({ enemies: this.enemies });
+      this.start({ combatants: [this.hero, ...this.enemies] });
       this.combat = true;
     },
     handleCombatEnd() {
