@@ -62,7 +62,6 @@ export class BattleController {
 
   private end(state: BattleState) {
     state.over = true;
-    state.orders = [];
   }
 
   private endTurn(state: BattleState) {

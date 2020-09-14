@@ -61,11 +61,29 @@
         </v-btn>
       </template>
     </v-snackbar>
+    <v-dialog
+      v-model="showBattleSummary"
+      width="800"
+      :fullscreen="$vuetify.breakpoint.xs"
+    >
+      <v-card dark>
+        <v-card-title>
+          <h1>Game Over</h1>
+        </v-card-title>
+        <v-card-text>
+          Did you win?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="onCloseSummary">Maybe</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'vue-property-decorator';
+import { Component, Watch } from 'vue-property-decorator';
 import EnemyCard from '@/components/combat/EnemyCard.vue';
 import HeroCard from '@/components/combat/HeroCard.vue';
 import ImpressiveMessage from '@/components/ImpressiveMessage.vue';
@@ -111,6 +129,7 @@ export default class Combat extends Vue {
   public selectTarget!: (payload: { id: string }) => void;
 
   public waitYourTurnWarning = false;
+  public showBattleSummary = false;
 
   public get isHeroDead() {
     return this.hero.life <= 0;
@@ -118,6 +137,17 @@ export default class Combat extends Vue {
 
   public get isPlayerTurn() {
     return this.currentCombatant.id === this.hero.id;
+  }
+
+  @Watch('isOver')
+  public OnGameOver() {
+    if (this.isOver) {
+      this.showBattleSummary = true;
+    }
+  }
+
+  public onCloseSummary() {
+    this.showBattleSummary = false;
   }
 
   public onEnemyClick(enemy: Monster) {
