@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { GameState } from '@/models';
-import { CombatModule } from './modules/combat';
 import { defaultHero } from '@/models/defaultHero';
 import { BattleModule } from './modules/battle';
 
@@ -14,7 +13,6 @@ export default new Vuex.Store<GameState>({
   mutations: {},
   actions: {},
   modules: {
-    combat: CombatModule,
     battle: BattleModule,
   },
 });

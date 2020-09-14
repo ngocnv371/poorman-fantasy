@@ -1,5 +1,5 @@
 import { Module } from 'vuex';
-import { BattleState, GameState, CharacterController } from '@/models';
+import { BattleState, GameState } from '@/models';
 import { BattleController } from '@/core';
 
 const controller = new BattleController();

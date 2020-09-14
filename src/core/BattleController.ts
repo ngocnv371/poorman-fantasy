@@ -109,8 +109,6 @@ export class BattleController {
       throw new Error(`Selected target #${state.selectedTargetId} not found`);
     }
     this.useAbility(state, player, ability, target);
-    state.selectedAbilityId = '';
-    state.selectedTargetId = '';
     this.endTurn(state);
   }
 
