@@ -148,6 +148,7 @@ export default class Combat extends Vue {
 
   public onCloseSummary() {
     this.showBattleSummary = false;
+    this.$emit('end');
   }
 
   public onEnemyClick(enemy: Monster) {
